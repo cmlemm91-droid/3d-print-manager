@@ -23,7 +23,7 @@ mkdir -p ~/print_manager
 cd ~/print_manager
 
 # Dateien vom GitHub Repo klonen (oder kopieren)
-# git clone <DEINE_REPO_URL> .
+ git clone [<DEINE_REPO_URL> .](https://github.com/cmlemm91-droid/3d-print-manager)
 
 # Virtuelle Umgebung erstellen
 python3 -m venv .venv
