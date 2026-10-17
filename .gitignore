@@ -1,0 +1,4 @@
+print_manager.db
+.venv/
+__pycache__/
+*.pdf

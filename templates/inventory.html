@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Lager - 3D Print Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <nav class="bg-blue-600 text-white p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold">🖨️ PrintManager</a>
+            <div class="flex gap-6">
+                <a href="/" class="hover:underline">Dashboard</a>
+                <a href="/orders" class="hover:underline">Aufträge</a>
+                <a href="/inventory" class="hover:underline font-bold">Lager</a>
+                <a href="/customers" class="hover:underline">Kunden</a>
+            </div>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div class="bg-white p-6 rounded shadow border-t-4 border-green-500">
+                <h2 class="text-xl font-semibold mb-4">📦 Neu anlegen</h2>
+                <form action="/add_material" method="post" class="flex flex-col gap-2">
+                    <input name="material" placeholder="Typ (PLA...)" class="border p-2 rounded" required>
+                    <input name="color" placeholder="Farbe" class="border p-2 rounded" required>
+                    <input name="weight" type="number" step="0.1" placeholder="Gewicht (g)" class="border p-2 rounded" required>
+                    <input name="price_per_kg" type="number" step="0.01" placeholder="Preis/kg (€)" class="border p-2 rounded" required>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Hinzufügen</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow border-t-4 border-gray-600">
+                <h2 class="text-xl font-semibold mb-4">➕ Wareneingang</h2>
+                <form action="/add_stock" method="post" class="flex flex-col gap-2">
+                    <select name="material_id" class="border p-2 rounded" required>
+                        <option value="">Material wählen...</option>
+                        {% for m in inventory %}
+                        <option value="{{ m.id }}">{{ m.material }} ({{ m.color }})</option>
+                        {% endfor %}
+                    </select>
+                    <input name="amount" type="number" step="0.1" placeholder="Menge hinzufügen (g)" class="border p-2 rounded" required>
+                    <button type="submit" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">Bestand erhöhen</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">📊 Gesamtbestand</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {% for item in inventory %}
+                <div class="p-4 rounded border flex justify-between items-center
+                    {% if item.weight < 200 %} bg-red-100 border-red-300 {% elif item.weight < 500 %} bg-yellow-100 border-yellow-300 {% else %} bg-green-50 border-green-200 {% endif %}">
+                    <div>
+                        <p class="text-sm font-bold">{{ item.material }} - {{ item.color }}</p>
+                        <p class="text-xs text-gray-500">Preis: {{ item.price_per_kg }}€/kg</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-black">{{ item.weight }}g</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

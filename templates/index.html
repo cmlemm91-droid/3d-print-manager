@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - 3D Print Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- NAV -->
+        <nav class="bg-blue-600 text-white p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold">🖨️ PrintManager</a>
+            <div class="flex gap-6">
+                <a href="/" class="hover:underline">Dashboard</a>
+                <a href="/orders" class="hover:underline">Aufträge</a>
+                <a href="/inventory" class="hover:underline">Lager</a>
+                <a href="/customers" class="hover:underline">Kunden</a>
+            </div>
+        </nav>
+
+        <h1 class="text-3xl font-bold mb-8">Willkommen zurück! 🚀</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- WICHTIGSTE AUFTRÄGE -->
+            <div class="bg-white p-6 rounded shadow border-t-4 border-blue-400">
+                <h2 class="text-xl font-semibold mb-4 text-blue-600">⏳ Aktuelle Druckliste</h2>
+                {% if not open_orders %}
+                    <p class="text-gray-500 italic">Keine offenen Aufträge.</p>
+                {% else %}
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50">
+                        <tr class="border-b">
+                            <th class="p-2">Kunde</th><th>Modell</th><th>Preis</th><th>Aktion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in open_orders %}
+                        <tr class="border-b">
+                            <td class="p-2">{{ order.customer_name }}</td><td>{{ order.model }}</td>
+                            <td class="font-semibold">{{ order.price }} €</td>
+                            <td class="p-2"><a href="/complete/{{ order.id }}" class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">Fertig</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+
+            <!-- MATERIAL WARNUNGEN -->
+            <div class="bg-white p-6 rounded shadow border-t-4 border-red-400">
+                <h2 class="text-xl font-semibold mb-4 text-red-600">⚠️ Knappes Material</h2>
+                {% if not low_stock %}
+                    <p class="text-gray-500 italic">Alle Bestände sind ausreichend.</p>
+                {% else %}
+                <div class="grid grid-cols-1 gap-3">
+                    {% for item in low_stock %}
+                    <div class="p-3 rounded border flex justify-between items-center bg-red-50 border-red-200">
+                        <p class="text-sm font-bold">{{ item.material }} ({{ item.color }})</p>
+                        <p class="text-lg font-black text-red-600">{{ item.weight }}g</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

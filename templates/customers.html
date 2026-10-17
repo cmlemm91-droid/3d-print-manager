@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kunden - 3D Print Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <nav class="bg-blue-600 text-white p-4 rounded-lg shadow-lg mb-8 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold">🖨️ PrintManager</a>
+            <div class="flex gap-6">
+                <a href="/" class="hover:underline">Dashboard</a>
+                <a href="/orders" class="hover:underline">Aufträge</a>
+                <a href="/inventory" class="hover:underline">Lager</a>
+                <a href="/customers" class="hover:underline font-bold">Kunden</a>
+            </div>
+        </nav>
+
+        <div class="bg-white p-6 rounded shadow mb-8 border-t-4 border-purple-500">
+            <h2 class="text-xl font-semibold mb-4">👤 Neuen Kunden anlegen</h2>
+            <form action="/add_customer" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input name="name" placeholder="Name" class="border p-2 rounded" required>
+                <input name="street" placeholder="Straße" class="border p-2 rounded" required>
+                <input name="house_number" placeholder="Hausnummer" class="border p-2 rounded" required>
+                <div class="flex gap-2">
+                    <input name="zip" placeholder="PLZ" class="border p-2 rounded w-1/3" required>
+                    <input name="city" placeholder="Ort" class="border p-2 rounded w-2/3" required>
+                </div>
+                <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 font-bold">Kunde speichern</button>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">👥 Kundenliste</h2>
+            <table class="w-full text-left text-sm">
+                <thead class="bg-gray-50">
+                    <tr class="border-b">
+                        <th class="p-2">ID</th><th>Name</th><th>Adresse</th><th>Ort</th>
+                    </tr>
+                </thead>
+                <tbody>
+    {% for c in customers %}
+    <tr class="border-b hover:bg-gray-50">
+        <td class="p-2">{{ c.id }}</td>
+        <td class="p-2"><a href="/customer/{{ c.id }}" class="text-blue-600 font-bold hover:underline">{{ c.name }}</a></td>
+        <td class="p-2">{{ c.street }} {{ c.house_number }}</td>
+        <td class="p-2">{{ c.zip }} {{ c.city }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
